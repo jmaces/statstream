@@ -1,5 +1,13 @@
 """Tests for `statstream.exact`. """
+from itertools import tee
+
+import numpy as np
+
 from hypothesis import given
+from scipy.linalg import cholesky
+
+import statstream.exact
+
 from .strategies import (
     assert_eq,
     assert_leq,
@@ -9,18 +17,13 @@ from .strategies import (
     batched_int_array_tuple_iterator,
 )
 
-import numpy as np
-from scipy.linalg import cholesky
-import statstream.exact
-from itertools import tee
-
 
 # comparison tests
 @given(
-    batched_float_array_iterator() |
-    batched_int_array_iterator() |
-    batched_float_array_tuple_iterator() |
-    batched_int_array_tuple_iterator()
+    batched_float_array_iterator()
+    | batched_int_array_iterator()
+    | batched_float_array_tuple_iterator()
+    | batched_int_array_tuple_iterator()
 )
 def test_min_leq_max(X):
     """Minimum is less or equal to maximum. """
@@ -31,10 +34,10 @@ def test_min_leq_max(X):
 
 
 @given(
-    batched_float_array_iterator() |
-    batched_int_array_iterator() |
-    batched_float_array_tuple_iterator() |
-    batched_int_array_tuple_iterator()
+    batched_float_array_iterator()
+    | batched_int_array_iterator()
+    | batched_float_array_tuple_iterator()
+    | batched_int_array_tuple_iterator()
 )
 def test_min_leq_mean(X):
     """Minimum is less or equal to mean. """
@@ -45,10 +48,10 @@ def test_min_leq_mean(X):
 
 
 @given(
-    batched_float_array_iterator() |
-    batched_int_array_iterator() |
-    batched_float_array_tuple_iterator() |
-    batched_int_array_tuple_iterator()
+    batched_float_array_iterator()
+    | batched_int_array_iterator()
+    | batched_float_array_tuple_iterator()
+    | batched_int_array_tuple_iterator()
 )
 def test_mean_leq_max(X):
     """Mean is less or equal to maximum. """
@@ -59,10 +62,10 @@ def test_mean_leq_max(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2) |
-    batched_int_array_iterator(min_batch_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2)
+    batched_float_array_iterator(min_batch_size=2)
+    | batched_int_array_iterator(min_batch_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2)
 )
 def test_var_geq_zero(X):
     """Variance is greater or equal to zero. """
@@ -71,10 +74,10 @@ def test_var_geq_zero(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2) |
-    batched_int_array_iterator(min_batch_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2)
+    batched_float_array_iterator(min_batch_size=2)
+    | batched_int_array_iterator(min_batch_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2)
 )
 def test_std_geq_zero(X):
     """Standard deviation is greater or equal to zero. """
@@ -84,10 +87,10 @@ def test_std_geq_zero(X):
 
 # consistency tests
 @given(
-    batched_float_array_iterator(min_batch_size=2) |
-    batched_int_array_iterator(min_batch_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2)
+    batched_float_array_iterator(min_batch_size=2)
+    | batched_int_array_iterator(min_batch_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2)
 )
 def test_mean_and_var_eq_mean_and_var(X):
     """Combined mean and variance is equal to individual mean and variance. """
@@ -100,10 +103,10 @@ def test_mean_and_var_eq_mean_and_var(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2) |
-    batched_int_array_iterator(min_batch_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2)
+    batched_float_array_iterator(min_batch_size=2)
+    | batched_int_array_iterator(min_batch_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2)
 )
 def test_mean_and_std_eq_mean_and_std(X):
     """Combined mean and standard deviation is equal to individual mean and
@@ -118,10 +121,10 @@ def test_mean_and_std_eq_mean_and_std(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    batched_float_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
 )
 def test_mean_and_cov_eq_mean_and_cov(X):
     """Combined mean and covariance matrix is equal to individual mean and
@@ -136,10 +139,10 @@ def test_mean_and_cov_eq_mean_and_cov(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    batched_float_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
 )
 def test_diag_cov_eq_var(X):
     """Diagonal of covariance matrix is equal to variance. """
@@ -148,43 +151,45 @@ def test_diag_cov_eq_var(X):
     cov = statstream.exact.streaming_cov(X2)
     shape, ndim = cov.shape, cov.ndim
     assert ndim % 2 == 0
-    assert np.array_equal(shape[:ndim//2], shape[ndim//2:])
-    prod = np.prod(shape[:ndim//2])
+    assert np.array_equal(shape[: ndim // 2], shape[ndim // 2 :])
+    prod = np.prod(shape[: ndim // 2])
     cov_matrix = np.reshape(cov, (prod, prod))
     assert_eq(cov_matrix, cov_matrix.T)
     diag = np.diag(cov_matrix)
     assert_eq(
         var,
-        np.reshape(diag, shape[:ndim//2]),
+        np.reshape(diag, shape[: ndim // 2]),
         atol=np.sqrt(np.finfo(np.float64).eps),
     )
 
 
 # property tests
 @given(
-    batched_float_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    batched_float_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
 )
 def test_cov_is_symmetric(X):
     """Covariance matrix is square and symmetric. """
     cov = statstream.exact.streaming_cov(X)
     shape, ndim = cov.shape, cov.ndim
     assert ndim % 2 == 0
-    assert np.array_equal(shape[:ndim//2], shape[ndim//2:])
+    assert np.array_equal(shape[: ndim // 2], shape[ndim // 2 :])
     covT = np.transpose(
         cov,
-        axes=np.concatenate((np.arange(ndim//2, ndim), np.arange(0, ndim//2))),
+        axes=np.concatenate(
+            (np.arange(ndim // 2, ndim), np.arange(0, ndim // 2))
+        ),
     )
     assert_eq(cov, covT)
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    batched_float_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
 )
 def test_cov_is_psd(X):
     """Covariance matrix is symmetric positive semidefinite.
@@ -196,8 +201,8 @@ def test_cov_is_psd(X):
     cov = statstream.exact.streaming_cov(X)
     shape, ndim = cov.shape, cov.ndim
     assert ndim % 2 == 0
-    assert np.array_equal(shape[:ndim//2], shape[ndim//2:])
-    prod = np.prod(shape[:ndim//2])
+    assert np.array_equal(shape[: ndim // 2], shape[ndim // 2 :])
+    prod = np.prod(shape[: ndim // 2])
     cov_matrix = np.reshape(cov, (prod, prod))
     assert_eq(cov_matrix, cov_matrix.T)
     # cholesky decomposition raises LinAlgError if not positive definite
@@ -210,10 +215,10 @@ def test_cov_is_psd(X):
 
 # comparison tests for using ``steps`` argument or not
 @given(
-    batched_float_array_iterator() |
-    batched_int_array_iterator() |
-    batched_float_array_tuple_iterator() |
-    batched_int_array_tuple_iterator()
+    batched_float_array_iterator()
+    | batched_int_array_iterator()
+    | batched_float_array_tuple_iterator()
+    | batched_int_array_tuple_iterator()
 )
 def test_min_step_eq_no_step(X):
     """Minimum is equal to minimum with ``steps``. """
@@ -225,10 +230,10 @@ def test_min_step_eq_no_step(X):
 
 
 @given(
-    batched_float_array_iterator() |
-    batched_int_array_iterator() |
-    batched_float_array_tuple_iterator() |
-    batched_int_array_tuple_iterator()
+    batched_float_array_iterator()
+    | batched_int_array_iterator()
+    | batched_float_array_tuple_iterator()
+    | batched_int_array_tuple_iterator()
 )
 def test_max_step_eq_no_step(X):
     """Maximum is equal to maximum with ``steps``. """
@@ -240,10 +245,10 @@ def test_max_step_eq_no_step(X):
 
 
 @given(
-    batched_float_array_iterator() |
-    batched_int_array_iterator() |
-    batched_float_array_tuple_iterator() |
-    batched_int_array_tuple_iterator()
+    batched_float_array_iterator()
+    | batched_int_array_iterator()
+    | batched_float_array_tuple_iterator()
+    | batched_int_array_tuple_iterator()
 )
 def test_mean_step_eq_no_step(X):
     """Mean is equal to mean with ``steps``. """
@@ -255,10 +260,10 @@ def test_mean_step_eq_no_step(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2) |
-    batched_int_array_iterator(min_batch_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2)
+    batched_float_array_iterator(min_batch_size=2)
+    | batched_int_array_iterator(min_batch_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2)
 )
 def test_var_step_eq_no_step(X):
     """Variance is equal to variance with ``steps``. """
@@ -270,10 +275,10 @@ def test_var_step_eq_no_step(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2) |
-    batched_int_array_iterator(min_batch_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2)
+    batched_float_array_iterator(min_batch_size=2)
+    | batched_int_array_iterator(min_batch_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2)
 )
 def test_std_step_eq_no_step(X):
     """Standard deviation is equal to standard deviation with ``steps``. """
@@ -285,10 +290,10 @@ def test_std_step_eq_no_step(X):
 
 
 @given(
-    batched_float_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_iterator(min_batch_size=2, min_data_size=2) |
-    batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2) |
-    batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    batched_float_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_iterator(min_batch_size=2, min_data_size=2)
+    | batched_float_array_tuple_iterator(min_batch_size=2, min_data_size=2)
+    | batched_int_array_tuple_iterator(min_batch_size=2, min_data_size=2)
 )
 def test_cov_step_eq_no_step(X):
     """Covariance matrix is equal to covariance matrix with ``steps``. """

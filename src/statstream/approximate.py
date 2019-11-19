@@ -7,9 +7,11 @@ This includes for example low rank factorisations of covariance matrices.
 
 """
 import numpy as np
-from tqdm import tqdm
+
 from scipy.linalg import svd
 from scipy.sparse.linalg import svds
+from tqdm import tqdm
+
 from .exact import streaming_mean
 
 
@@ -107,12 +109,12 @@ def _merge_low_rank_eigendecomposition(S1, V1, S2, V2, rank=None):
            2011.
     """
     rank1, rank2 = S1.size, S2.size
-    if not rank or rank > rank1+rank2:
-        rank = rank1+rank2
+    if not rank or rank > rank1 + rank2:
+        rank = rank1 + rank2
     if rank > min(V1.shape[0], V2.shape[0]):
         rank = min(V1.shape[0], V2.shape[0])
     Z = V1.T @ V2
-    Q, R = np.linalg.qr(V2 - V1 @ Z, mode='reduced')
+    Q, R = np.linalg.qr(V2 - V1 @ Z, mode="reduced")
     Zfill = np.zeros([rank2, rank1])
     B = np.concatenate(
         [
@@ -126,8 +128,9 @@ def _merge_low_rank_eigendecomposition(S1, V1, S2, V2, rank=None):
     return S, V
 
 
-def streaming_low_rank_autocorrelation(X, rank, steps=None, shift=0.0,
-                                       tree=False):
+def streaming_low_rank_autocorrelation(
+    X, rank, steps=None, shift=0.0, tree=False
+):
     """Low rank factorization of the sample autocorrelation matrix of a
     streaming dataset.
 
@@ -197,12 +200,10 @@ def streaming_low_rank_autocorrelation(X, rank, steps=None, shift=0.0,
            "Scalability of Semantic Analysis in Natural Language Processing",
            2011.
     """
+
     def _process_batch(batch, S, V, rank, count):
         batch_size = batch.shape[0]
-        Ub, Sb, Vb = _truncated_svd(
-             np.reshape(batch, [batch_size, -1]),
-             rank,
-        )
+        Ub, Sb, Vb = _truncated_svd(np.reshape(batch, [batch_size, -1]), rank,)
         if S is None or V is None:
             S, V = Sb, Vb
         else:
@@ -212,57 +213,58 @@ def streaming_low_rank_autocorrelation(X, rank, steps=None, shift=0.0,
 
     def _tree_process_batch(batch, stack, rank, count):
         batch_size = batch.shape[0]
-        Ub, Sb, Vb = _truncated_svd(
-            np.reshape(batch, [batch_size, -1]),
-            rank,
-        )
-        stack.append({'S': Sb, 'V': Vb, 'level': 0})
-        while len(stack) >= 2 and stack[-1]['level'] == stack[-2]['level']:
+        Ub, Sb, Vb = _truncated_svd(np.reshape(batch, [batch_size, -1]), rank,)
+        stack.append({"S": Sb, "V": Vb, "level": 0})
+        while len(stack) >= 2 and stack[-1]["level"] == stack[-2]["level"]:
             item1, item2 = stack.pop(), stack.pop()
             S, V = _merge_low_rank_eigendecomposition(
-                item1['S'], item1['V'], item2['S'], item2['V'], rank=rank
+                item1["S"], item1["V"], item2["S"], item2["V"], rank=rank
             )
-            stack.append({'S': S, 'V': V, 'level': item1['level']+1})
+            stack.append({"S": S, "V": V, "level": item1["level"] + 1})
         count += batch_size
         return stack, count
 
     if tree:
         stack, count = [], 0
         if steps:
-            for step in tqdm(range(steps), 'autocorrelation approximation'):
+            for step in tqdm(range(steps), "autocorrelation approximation"):
                 batch = next(X)
                 if isinstance(batch, tuple) and len(batch) > 1:
                     batch = batch[0]
-                stack, count = _tree_process_batch(batch-shift, stack, rank,
-                                                   count)
+                stack, count = _tree_process_batch(
+                    batch - shift, stack, rank, count
+                )
         else:
-            for batch in tqdm(X, 'autocorrelation approximation'):
+            for batch in tqdm(X, "autocorrelation approximation"):
                 if isinstance(batch, tuple) and len(batch) > 1:
                     batch = batch[0]
-                stack, count = _tree_process_batch(batch-shift, stack, rank,
-                                                   count)
+                stack, count = _tree_process_batch(
+                    batch - shift, stack, rank, count
+                )
         while len(stack) >= 2:
             item1, item2 = stack.pop(), stack.pop()
             S, V = _merge_low_rank_eigendecomposition(
-                item1['S'], item1['V'], item2['S'], item2['V'], rank
+                item1["S"], item1["V"], item2["S"], item2["V"], rank
             )
-            stack.append({'S': S, 'V': V, 'level': item1['level']+1})
-        S, V = stack[0]['S'], stack[0]['V']
+            stack.append({"S": S, "V": V, "level": item1["level"] + 1})
+        S, V = stack[0]["S"], stack[0]["V"]
     else:
         S, V, count = None, None, 0
         if steps:
-            for step in tqdm(range(steps), 'autocorrelation approximation'):
+            for step in tqdm(range(steps), "autocorrelation approximation"):
                 batch = next(X)
                 if isinstance(batch, tuple) and len(batch) > 1:
                     batch = batch[0]
-                S, V, count = _process_batch(batch-shift, S, V, rank, count)
+                S, V, count = _process_batch(batch - shift, S, V, rank, count)
         else:
-            for batch in tqdm(X, 'autocorrelation approximation'):
+            for batch in tqdm(X, "autocorrelation approximation"):
                 if isinstance(batch, tuple) and len(batch) > 1:
                     batch = batch[0]
-                S, V, count = _process_batch(batch-shift, S, V, rank, count)
+                S, V, count = _process_batch(batch - shift, S, V, rank, count)
     factor = V * np.expand_dims(S, 0)
-    return np.reshape(factor.T, (S.size,)+batch.shape[1:])/np.sqrt(count-1)
+    return np.reshape(factor.T, (S.size,) + batch.shape[1:]) / np.sqrt(
+        count - 1
+    )
 
 
 def streaming_low_rank_cov(X, rank, steps=None, tree=False, reset=None):
@@ -356,17 +358,14 @@ def streaming_low_rank_cov(X, rank, steps=None, tree=False, reset=None):
     else:
         X.reset()
     covariance = streaming_low_rank_autocorrelation(
-        X,
-        rank,
-        steps=steps,
-        shift=mean,
-        tree=tree,
+        X, rank, steps=steps, shift=mean, tree=tree,
     )
     return covariance
 
 
-def streaming_mean_and_low_rank_cov(X, rank, steps=None, tree=False,
-                                    reset=None):
+def streaming_mean_and_low_rank_cov(
+    X, rank, steps=None, tree=False, reset=None
+):
     """Mean and a low rank factorization of the covariance matrix of a
     streaming dataset.
 
@@ -454,11 +453,7 @@ def streaming_mean_and_low_rank_cov(X, rank, steps=None, tree=False,
     else:
         X.reset()
     covariance = streaming_low_rank_autocorrelation(
-        X,
-        rank,
-        steps=steps,
-        shift=mean,
-        tree=tree,
+        X, rank, steps=steps, shift=mean, tree=tree,
     )
     return mean, covariance
 

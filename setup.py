@@ -2,7 +2,8 @@ import codecs
 import os
 import re
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
+
 
 ###################################################################
 
@@ -64,12 +65,11 @@ def find_meta(meta):
     Extract __*meta*__ from META_FILE.
     """
     meta_match = re.search(
-        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta),
-        META_FILE, re.M
+        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta), META_FILE, re.M
     )
     if meta_match:
         return meta_match.group(1)
-    print("Debug", meta,  meta_match)
+    print("Debug", meta, meta_match)
     raise RuntimeError("Unable to find __{meta}__ string.".format(meta=meta))
 
 

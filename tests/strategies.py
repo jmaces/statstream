@@ -1,15 +1,16 @@
 """Custom strategies for hypothesis testing. """
-import numpy as np
-from hypothesis import assume
-import hypothesis.strategies as st
 import hypothesis.extra.numpy as hnp
+import hypothesis.strategies as st
+import numpy as np
+
+from hypothesis import assume
 
 
 # array comparison helpers robust to precision loss
 def assert_eq(x, y, atol=np.finfo(np.float64).eps, rtol=1e-7):
     """Robustly and symmetrically assert x == y componentwise. """
-    tol = atol + rtol*np.maximum(np.abs(x), np.abs(y), dtype=np.float64)
-    np.testing.assert_array_less(np.abs(x-y), tol)
+    tol = atol + rtol * np.maximum(np.abs(x), np.abs(y), dtype=np.float64)
+    np.testing.assert_array_less(np.abs(x - y), tol)
 
 
 def assert_leq(x, y, atol=np.finfo(np.float64).eps, rtol=1e-7):
@@ -19,7 +20,7 @@ def assert_leq(x, y, atol=np.finfo(np.float64).eps, rtol=1e-7):
 
 
 # data generation strategies
-def clean_floats(min_value=-1e150, max_value=1e150, width=64):
+def clean_floats(min_value=-1e30, max_value=1e30, width=64):
     """Custom floating point number strategy.
 
     Summing very large or very small floats (e.g. for means) leads to overflow
@@ -36,17 +37,22 @@ def clean_floats(min_value=-1e150, max_value=1e150, width=64):
     is wrong somewhere else.
     """
     if width == 64:
-        min_value, max_value = np.clip((min_value, max_value), -1e30, 1e30,
-                                       dtype=np.float64)
+        min_value, max_value = np.clip(
+            (min_value, max_value), -1e30, 1e30, dtype=np.float64
+        )
     elif width == 32:
-        min_value, max_value = np.clip((min_value, max_value), -1e15, 1e15,
-                                       dtype=np.float32)
+        min_value, max_value = np.clip(
+            (min_value, max_value), -1e15, 1e15, dtype=np.float32
+        )
     elif width == 16:
-        min_value, max_value = np.clip((min_value, max_value), -200, 200,
-                                       dtype=np.float16)
+        min_value, max_value = np.clip(
+            (min_value, max_value), -200, 200, dtype=np.float16
+        )
     else:
-        raise ValueError('Invalid width parameted, expected 16, 32, or 64'
-                         'but got {}.'.format(width))
+        raise ValueError(
+            "Invalid width parameted, expected 16, 32, or 64"
+            "but got {}.".format(width)
+        )
     return st.floats(
         allow_nan=False,
         allow_infinity=False,
@@ -57,8 +63,9 @@ def clean_floats(min_value=-1e150, max_value=1e150, width=64):
 
 
 @st.composite
-def batched_float_array_iterator(draw, min_batch_size=None,
-                                 min_data_size=None):
+def batched_float_array_iterator(
+    draw, min_batch_size=None, min_data_size=None
+):
     """Float array iterator strategy.
 
     The iterator yields batched arrays of arbitrary but fixed shape with at
@@ -70,21 +77,26 @@ def batched_float_array_iterator(draw, min_batch_size=None,
     """
     dtype = draw(hnp.floating_dtypes())
     bytes = dtype.itemsize
-    bits = 8*bytes
+    bits = 8 * bytes
     shape = draw(hnp.array_shapes(min_dims=2))
     if min_batch_size is not None:
         assume(shape[0] >= min_batch_size)
     if min_data_size is not None:
         assume(np.prod(shape[1:]) >= min_data_size)
-    ar = hnp.arrays(dtype, shape, elements=clean_floats(width=bits),
-                    fill=clean_floats(width=bits))
+    ar = hnp.arrays(
+        dtype,
+        shape,
+        elements=clean_floats(width=bits),
+        fill=clean_floats(width=bits),
+    )
     iter = draw(st.iterables(ar, min_size=1))
     return iter
 
 
 @st.composite
-def batched_float_array_tuple_iterator(draw, min_batch_size=None,
-                                       min_data_size=None):
+def batched_float_array_tuple_iterator(
+    draw, min_batch_size=None, min_data_size=None
+):
     """Float array tuple iterator strategy.
 
     The iterator yields tuples of batched arrays of arbitrary but fixed shape
@@ -96,21 +108,24 @@ def batched_float_array_tuple_iterator(draw, min_batch_size=None,
     """
     dtype = draw(hnp.floating_dtypes())
     bytes = dtype.itemsize
-    bits = 8*bytes
+    bits = 8 * bytes
     shape = draw(hnp.array_shapes(min_dims=2))
     if min_batch_size is not None:
         assume(shape[0] >= min_batch_size)
     if min_data_size is not None:
         assume(np.prod(shape[1:]) >= min_data_size)
-    ar = hnp.arrays(dtype, shape, elements=clean_floats(width=bits),
-                    fill=clean_floats(width=bits))
+    ar = hnp.arrays(
+        dtype,
+        shape,
+        elements=clean_floats(width=bits),
+        fill=clean_floats(width=bits),
+    )
     iter = draw(st.iterables(st.tuples(ar, ar), min_size=1))
     return iter
 
 
 @st.composite
-def batched_int_array_iterator(draw, min_batch_size=None,
-                               min_data_size=None):
+def batched_int_array_iterator(draw, min_batch_size=None, min_data_size=None):
     """Integer array iterator strategy.
 
     The iterator yields batched arrays of arbitrary but fixed shape with at
@@ -132,8 +147,9 @@ def batched_int_array_iterator(draw, min_batch_size=None,
 
 
 @st.composite
-def batched_int_array_tuple_iterator(draw, min_batch_size=None,
-                                     min_data_size=None):
+def batched_int_array_tuple_iterator(
+    draw, min_batch_size=None, min_data_size=None
+):
     """Integer array tuple iterator strategy.
 
     The iterator yields tuples of batched arrays of arbitrary but fixed shape

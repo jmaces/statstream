@@ -40,8 +40,7 @@ META_FILE = read(META_PATH)
 def find_meta(meta):
     """ Extract __*meta*__ from META_FILE. """
     meta_match = re.search(
-        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta),
-        META_FILE, re.M
+        r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta), META_FILE, re.M
     )
     if meta_match:
         return meta_match.group(1)
@@ -82,17 +81,17 @@ extensions = [
 
 # numpydoc settings
 numpydoc_xref_param_type = True
-numpydoc_xref_ignore = {'type', 'optional', 'default'}
+numpydoc_xref_ignore = {"type", "optional", "default"}
 
 
 # Intersphinx settings
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'numpy': ('https://numpy.org/doc/1.17/', None),
+    "python": ("https://docs.python.org/3/", None),
+    "numpy": ("https://numpy.org/doc/1.17/", None),
 }
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # The suffix of source filenames.
 source_suffix = ".rst"
@@ -103,7 +102,7 @@ master_doc = "index"
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -120,15 +119,15 @@ pygments_style = "sphinx"
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-if os.environ.get('READTHEDOCS'):
-    html_theme = 'sphinx_rtd_theme'
+if os.environ.get("READTHEDOCS"):
+    html_theme = "sphinx_rtd_theme"
 else:
-    html_theme = 'alabaster'
+    html_theme = "alabaster"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "{}-doc".format(project)
@@ -138,8 +137,7 @@ htmlhelp_basename = "{}-doc".format(project)
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, project, "{} Documentation".format(project),
-     [author], 1)
+    (master_doc, project, "{} Documentation".format(project), [author], 1)
 ]
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -148,7 +146,13 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, project, "{} Documentation".format(project),
-     author, project, find_meta("description"),
-     'Miscellaneous'),
+    (
+        master_doc,
+        project,
+        "{} Documentation".format(project),
+        author,
+        project,
+        find_meta("description"),
+        "Miscellaneous",
+    ),
 ]

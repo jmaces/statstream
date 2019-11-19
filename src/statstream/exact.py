@@ -7,6 +7,7 @@ This includes for example mean, variance, minimum, and maximum.
 
 """
 import numpy as np
+
 from tqdm import tqdm
 
 
@@ -45,18 +46,20 @@ def streaming_min(X, steps=None):
     --------
     streaming_max: get the componentwise maximum in a single pass.
     """
+
     def _process_batch(batch, min):
         batch_min = np.min(batch, axis=0)
         return np.minimum(batch_min, min)
+
     min = np.inf
     if steps:
-        for step in tqdm(range(steps), 'min calculation'):
+        for step in tqdm(range(steps), "min calculation"):
             batch = next(X)
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             min = _process_batch(batch, min)
     else:
-        for batch in tqdm(X, 'min calculation'):
+        for batch in tqdm(X, "min calculation"):
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             min = _process_batch(batch, min)
@@ -98,18 +101,20 @@ def streaming_max(X, steps=None):
     --------
     streaming_min: get the componentwise minimum in a single pass.
     """
+
     def _process_batch(batch, max):
         batch_max = np.max(batch, axis=0)
         return np.maximum(batch_max, max)
+
     max = -np.inf
     if steps:
-        for step in tqdm(range(steps), 'max calculation'):
+        for step in tqdm(range(steps), "max calculation"):
             batch = next(X)
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             max = _process_batch(batch, max)
     else:
-        for batch in tqdm(X, 'max calculation'):
+        for batch in tqdm(X, "max calculation"):
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             max = _process_batch(batch, max)
@@ -151,31 +156,32 @@ def streaming_mean(X, steps=None):
     --------
     streaming_mean_and_var: get both mean and variance in a single pass.
     """
+
     def _process_batch(batch, accumulator, count):
         batch_size = batch.shape[0]
         if accumulator is not None:
             batch_extended = np.concatenate(
-                [np.expand_dims(accumulator, 0), batch],
-                axis=0
+                [np.expand_dims(accumulator, 0), batch], axis=0
             )
             accumulator = np.sum(batch_extended, axis=0, dtype=np.float64)
         else:
             accumulator = np.sum(batch, axis=0, dtype=np.float64)
         count += batch_size
         return accumulator, count
+
     accumulator, count = None, 0
     if steps:
-        for step in tqdm(range(steps), 'mean calculation'):
+        for step in tqdm(range(steps), "mean calculation"):
             batch = next(X)
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             accumulator, count = _process_batch(batch, accumulator, count)
     else:
-        for batch in tqdm(X, 'mean calculation'):
+        for batch in tqdm(X, "mean calculation"):
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             accumulator, count = _process_batch(batch, accumulator, count)
-    return accumulator/count
+    return accumulator / count
 
 
 def streaming_var(X, steps=None):
@@ -281,41 +287,48 @@ def streaming_mean_and_var(X, steps=None):
            "Updating formulae and a pairwise algorithm for computing sample
            variances", 1979.
     """
+
     def _process_batch(batch, mean_accumulator, var_accumulator, count):
         batch_size = batch.shape[0]
         if mean_accumulator is not None:
             batch_sum = np.sum(batch, axis=0, dtype=np.float64)
-            diff = mean_accumulator/count - batch_sum/batch_size
-            correction = np.square(diff)/(count+batch_size)*count*batch_size
+            diff = mean_accumulator / count - batch_sum / batch_size
+            correction = (
+                np.square(diff) / (count + batch_size) * count * batch_size
+            )
             batch_extended = np.concatenate(
-                [np.expand_dims(mean_accumulator, 0), batch],
-                axis=0
+                [np.expand_dims(mean_accumulator, 0), batch], axis=0
             )
             mean_accumulator = np.sum(batch_extended, axis=0, dtype=np.float64)
-            batch_var = np.var(batch, axis=0, ddof=batch_size-1,
-                               dtype=np.float64)
+            batch_var = np.var(
+                batch, axis=0, ddof=batch_size - 1, dtype=np.float64
+            )
             var_accumulator += batch_var + correction
         else:
             mean_accumulator = np.sum(batch, axis=0, dtype=np.float64)
-            var_accumulator = np.var(batch, axis=0, ddof=batch_size-1,
-                                     dtype=np.float64)
+            var_accumulator = np.var(
+                batch, axis=0, ddof=batch_size - 1, dtype=np.float64
+            )
         count += batch_size
         return mean_accumulator, var_accumulator, count
+
     mean_accumulator, variance_accumulator, count = None, None, 0
     if steps:
-        for step in tqdm(range(steps), 'variance calculation'):
+        for step in tqdm(range(steps), "variance calculation"):
             batch = next(X)
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             mean_accumulator, variance_accumulator, count = _process_batch(
-                batch, mean_accumulator, variance_accumulator, count)
+                batch, mean_accumulator, variance_accumulator, count
+            )
     else:
-        for batch in tqdm(X, 'variance calculation'):
+        for batch in tqdm(X, "variance calculation"):
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             mean_accumulator, variance_accumulator, count = _process_batch(
-                batch, mean_accumulator, variance_accumulator, count)
-    return mean_accumulator/count, variance_accumulator/(count-1)
+                batch, mean_accumulator, variance_accumulator, count
+            )
+    return mean_accumulator / count, variance_accumulator / (count - 1)
 
 
 def streaming_std(X, steps=None):
@@ -561,49 +574,57 @@ def streaming_mean_and_cov(X, steps=None):
            "Updating formulae and a pairwise algorithm for computing sample
            variances", 1979.
     """
+
     def _process_batch(batch, mean_accumulator, cov_accumulator, count):
         batch_size = batch.shape[0]
         if mean_accumulator is not None:
             batch_sum = np.sum(batch, axis=0, dtype=np.float64)
             diff = np.reshape(
-                mean_accumulator/count - batch_sum/batch_size,
-                [np.prod(batch_sum.shape), 1]
+                mean_accumulator / count - batch_sum / batch_size,
+                [np.prod(batch_sum.shape), 1],
             )
             diff_prod = np.dot(diff, diff.T)
-            correction = diff_prod/(count+batch_size)*count*batch_size
+            correction = diff_prod / (count + batch_size) * count * batch_size
             batch_extended = np.concatenate(
-                [np.expand_dims(mean_accumulator, 0), batch],
-                axis=0
+                [np.expand_dims(mean_accumulator, 0), batch], axis=0
             )
             mean_accumulator = np.sum(batch_extended, axis=0, dtype=np.float64)
-            batch_cov = np.cov(np.reshape(batch, [batch_size, -1]),
-                               rowvar=False, ddof=batch_size-1)
+            batch_cov = np.cov(
+                np.reshape(batch, [batch_size, -1]),
+                rowvar=False,
+                ddof=batch_size - 1,
+            )
             cov_accumulator += batch_cov + correction
         else:
             mean_accumulator = np.sum(batch, axis=0, dtype=np.float64)
-            cov_accumulator = np.cov(np.reshape(batch, [batch_size, -1]),
-                                     rowvar=False, ddof=batch_size-1)
+            cov_accumulator = np.cov(
+                np.reshape(batch, [batch_size, -1]),
+                rowvar=False,
+                ddof=batch_size - 1,
+            )
         count += batch_size
         return mean_accumulator, cov_accumulator, count
+
     mean_accumulator, covariance_accumulator, count = None, None, 0
     if steps:
-        for step in tqdm(range(steps), 'mean and covariance calculation'):
+        for step in tqdm(range(steps), "mean and covariance calculation"):
             batch = next(X)
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             mean_accumulator, covariance_accumulator, count = _process_batch(
-                batch, mean_accumulator, covariance_accumulator, count)
+                batch, mean_accumulator, covariance_accumulator, count
+            )
     else:
-        for batch in tqdm(X, 'mean and covariance calculation'):
+        for batch in tqdm(X, "mean and covariance calculation"):
             if isinstance(batch, tuple) and len(batch) > 1:
                 batch = batch[0]
             mean_accumulator, covariance_accumulator, count = _process_batch(
-                batch, mean_accumulator, covariance_accumulator, count)
+                batch, mean_accumulator, covariance_accumulator, count
+            )
     covariance_accumulator = np.reshape(
-        covariance_accumulator,
-        2*mean_accumulator.shape,
+        covariance_accumulator, 2 * mean_accumulator.shape,
     )
-    return mean_accumulator/count, covariance_accumulator/(count-1)
+    return mean_accumulator / count, covariance_accumulator / (count - 1)
 
 
 # aliases
