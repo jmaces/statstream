@@ -1,0 +1,15 @@
+Initial release.
+
++  statstream.exact.streaming_min()
++  statstream.exact.streaming_max()
++  statstream.exact.streaming_mean()
++  statstream.exact.streaming_var()
++  statstream.exact.streaming_mean_and_var()
++  statstream.exact.streaming_std()
++  statstream.exact.streaming_mean_and_std()
++  statstream.exact.streaming_cov()
++  statstream.exact.streaming_mean_and_cov()
+
++ statstream.approximate.streaming_low_rank_autocorrelation()
++ statstream.approximate.streaming_low_rank_cov()
++ statstream.approximate.streaming_mean_and_low_rank_cov()
