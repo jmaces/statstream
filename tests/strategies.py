@@ -38,16 +38,16 @@ def clean_floats(min_value=-1e30, max_value=1e30, width=64):
     """
     if width == 64:
         min_value, max_value = np.clip(
-            (min_value, max_value), -1e30, 1e30, dtype=np.float64
-        )
+            (min_value, max_value), -1e30, 1e30
+        ).astype(np.float64)
     elif width == 32:
         min_value, max_value = np.clip(
-            (min_value, max_value), -1e15, 1e15, dtype=np.float32
-        )
+            (min_value, max_value), -1e15, 1e15
+        ).astype(np.float32)
     elif width == 16:
         min_value, max_value = np.clip(
-            (min_value, max_value), -200, 200, dtype=np.float16
-        )
+            (min_value, max_value), -200, 200
+        ).astype(np.float16)
     else:
         raise ValueError(
             "Invalid width parameted, expected 16, 32, or 64"

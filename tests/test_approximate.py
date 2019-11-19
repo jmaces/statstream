@@ -28,6 +28,8 @@ class ResettableIterator(object):
     def __next__(self):
         return next(self.iter)
 
+    next = __next__  # for Python 2 compatibility
+
     def reset(self):
         self.iter = iter(self.list)
 
@@ -74,7 +76,7 @@ def test_mean_and_low_rank_cov_eq_mean_and_low_rank_cov(
     # thus we have to be quite genererous with the tolerance here
     assert_eq(mean1, mean2)
     assert_eq(
-        cov1.T @ cov1, cov2.T @ cov2, atol=1e-3, rtol=3e0,
+        np.matmul(cov1.T, cov1), np.matmul(cov2.T, cov2), atol=1e-3, rtol=3e0,
     )
 
 
@@ -105,7 +107,10 @@ def test_autocorrelation_step_eq_no_step(X, rank, tree):
     # errors depend on the conditioning of the matrices
     # thus we have to be quite genererous with the tolerance here
     assert_eq(
-        corr1.T @ corr1, corr2.T @ corr2, atol=1e-3, rtol=3e0,
+        np.matmul(corr1.T, corr1),
+        np.matmul(corr2.T, corr2),
+        atol=1e-3,
+        rtol=3e0,
     )
 
 
@@ -145,5 +150,5 @@ def test_cov_step_eq_no_step(X, rank, tree, reset_func):
     # errors depend on the conditioning of the matrices
     # thus we have to be quite genererous with the tolerance here
     assert_eq(
-        cov1.T @ cov1, cov2.T @ cov2, atol=1e-3, rtol=3e0,
+        np.matmul(cov1.T, cov1), np.matmul(cov2.T, cov2), atol=1e-3, rtol=3e0,
     )

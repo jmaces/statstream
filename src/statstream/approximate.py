@@ -113,18 +113,18 @@ def _merge_low_rank_eigendecomposition(S1, V1, S2, V2, rank=None):
         rank = rank1 + rank2
     if rank > min(V1.shape[0], V2.shape[0]):
         rank = min(V1.shape[0], V2.shape[0])
-    Z = V1.T @ V2
-    Q, R = np.linalg.qr(V2 - V1 @ Z, mode="reduced")
+    Z = np.matmul(V1.T, V2)
+    Q, R = np.linalg.qr(V2 - np.matmul(V1, Z), mode="reduced")
     Zfill = np.zeros([rank2, rank1])
     B = np.concatenate(
         [
-            np.concatenate([np.diag(S1), Z @ np.diag(S2)], axis=1),
-            np.concatenate([Zfill, R @ np.diag(S2)], axis=1),
+            np.concatenate([np.diag(S1), np.matmul(Z, np.diag(S2))], axis=1),
+            np.concatenate([Zfill, np.matmul(R, np.diag(S2))], axis=1),
         ],
         axis=0,
     )
     U, S, VT = _truncated_svd(B, rank=rank)
-    V = V1 @ U[:rank1, :] + Q @ U[rank1:, :]
+    V = np.matmul(V1, U[:rank1, :]) + np.matmul(Q, U[rank1:, :])
     return S, V
 
 
