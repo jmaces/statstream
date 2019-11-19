@@ -11,7 +11,7 @@ PACKAGES = find_packages(where="src")
 META_PATH = os.path.join("src", "statstream", "__init__.py")
 KEYWORDS = ["statistics", "data-science", "streaming-data", "numpy"]
 CLASSIFIERS = [
-    "Development Status :: 1 - Planning",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
@@ -28,7 +28,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.8",
     "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Scientific/Engineering :: Mathematics",
-    "Private :: Do Not Upload",  # safeguard - remove for actual packages
+    # "Private :: Do Not Upload",  # safeguard - remove for actual packages
 ]
 INSTALL_REQUIRES = ["numpy", "tqdm", "scipy"]
 EXTRAS_REQUIRE = {
