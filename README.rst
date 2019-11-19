@@ -11,9 +11,13 @@
     :target: https://travis-ci.com/jmaces/statstream?branch=master
     :alt: CI Status
 
+.. image:: https://codecov.io/gh/jmaces/statstream/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/jmaces/statstream
+  :alt: Code Coverage
+
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
-    :alt: Code style: black
+    :alt: Code Style: Black
 
 
 .. teaser-start
