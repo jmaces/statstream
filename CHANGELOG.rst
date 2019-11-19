@@ -13,3 +13,28 @@ Changes for the upcoming release can be found in the `"changelog.d" directory <h
    See our contribution guide for details.
 
 .. towncrier release notes start
+
+19.1.0 (2019-11-19)
+-------------------
+
+Changes
+^^^^^^^
+
+- Initial release.   `#3 <https://github.com/jmaces/statstream/issues/3>`_
+
+  +  statstream.exact.streaming_min()
+  +  statstream.exact.streaming_max()
+  +  statstream.exact.streaming_mean()
+  +  statstream.exact.streaming_var()
+  +  statstream.exact.streaming_mean_and_var()
+  +  statstream.exact.streaming_std()
+  +  statstream.exact.streaming_mean_and_std()
+  +  statstream.exact.streaming_cov()
+  +  statstream.exact.streaming_mean_and_cov()
+
+  + statstream.approximate.streaming_low_rank_autocorrelation()
+  + statstream.approximate.streaming_low_rank_cov()
+  + statstream.approximate.streaming_mean_and_low_rank_cov()
+
+
+----
