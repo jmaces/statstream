@@ -29,12 +29,12 @@ CLASSIFIERS = [
     "Topic :: Scientific/Engineering :: Mathematics",
     "Private :: Do Not Upload",  # safeguard - remove for actual packages
 ]
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = ["numpy", "tqdm", "scipy"]
 EXTRAS_REQUIRE = {
-    "docs": ["sphinx"],
+    "docs": ["sphinx>=1.6.5", "numpydoc"],  # numpydoc needs sphinx 1.6.5+
     "tests": [
         "coverage",
-        "hypothesis",
+        "hypothesis[numpy]",
         "pytest>=4.3.0",  # 4.3.0 dropped last use of `convert`
     ],
 }

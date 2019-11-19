@@ -4,20 +4,21 @@
 
 .. add project badges here
 .. image:: https://readthedocs.org/projects/statstream/badge/?version=latest
-   :target: https://statstream.readthedocs.io/en/latest/?badge=latest
-   :alt: Documentation Status
+    :target: https://statstream.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 .. image:: https://travis-ci.com/jmaces/statstream.svg?branch=master
-   :target: https://travis-ci.com/jmaces/statstream?branch=master
-   :alt: CI Status
+    :target: https://travis-ci.com/jmaces/statstream?branch=master
+    :alt: CI Status
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/psf/black
-   :alt: Code style: black
+    :target: https://github.com/psf/black
+    :alt: Code style: black
 
-.. teaser
-``streamstat`` is a lightweight Python package providing data analysis and
-statistics utilities for streaming data.
+
+.. teaser-start
+
+``streamstat`` is a lightweight Python package providing data analysis and statistics utilities for streaming data.
 
 Its main goal is to provide **single-pass** variants of conventional `numpy <https://numpy.org/>`_
 data analysis and statistics functionality for **streaming** data that is
@@ -26,14 +27,19 @@ streamed as in chunks called **mini-batches**, which makes ``streamstat``
 extremely useful in combination with machine learning and deep learning
 packages like `keras <https://keras.io/>`_, `tensorflow <https://www.tensorflow.org/>`_, or `pytorch <https://pytorch.org/>`_.
 
+.. teaser-end
+
 
 .. example
+
 ``streamstat`` functions consume iterators
 
 .. code-block:: python
 
    import streamstat
 
+
+.. project-info-start
 
 Project Information
 ===================
@@ -47,6 +53,10 @@ It’s tested on Python 2.7 and 3.4+.
 If you'd like to contribute to ``streamstat`` you're most welcome.
 We have written a `short guide <https://github.com/jmaces/statstream/blob/master/.github/CONTRIBUTING.rst>`_ to help you get you started!
 
+.. project-info-end
+
+
+.. literature-start
 
 Further Reading
 ===============
@@ -54,8 +64,14 @@ Further Reading
 Additional information on the algorithmic aspects of ``streamstat`` can be found
 in the following works:
 
-- todo
-- todo
+- Tony F. Chan & Gene H. Golub & Randall J. LeVeque,
+  “Updating formulae and a pairwise algorithm for computing sample variances”,
+  1979
+- Radim, Rehurek,
+  “Scalability of Semantic Analysis in Natural Language Processing”,
+  2011
+
+.. literature-end
 
 
 Acknowledgments

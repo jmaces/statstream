@@ -13,8 +13,7 @@
 import codecs
 import os
 import re
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import sys
 
 
 # -- Project information -----------------------------------------------------
@@ -22,11 +21,14 @@ import re
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 META_PATH = os.path.join("src", "statstream", "__init__.py")
 
+# add project root and package source to path
+sys.path.insert(0, os.path.abspath(ROOT))
+sys.path.insert(0, os.path.abspath(os.path.join(ROOT, "src")))
+
 
 def read(*parts):
-    """
-    Build an absolute path from *parts* and and return the contents of the
-    resulting file.  Assume UTF-8 encoding.
+    """ Build an absolute path from *parts* and and return the contents of the
+        resulting file.  Assume UTF-8 encoding.
     """
     with codecs.open(os.path.join(ROOT, *parts), "rb", "utf-8") as f:
         return f.read()
@@ -36,9 +38,7 @@ META_FILE = read(META_PATH)
 
 
 def find_meta(meta):
-    """
-    Extract __*meta*__ from META_FILE.
-    """
+    """ Extract __*meta*__ from META_FILE. """
     meta_match = re.search(
         r"^__{meta}__ = ['\"]([^'\"]*)['\"]".format(meta=meta),
         META_FILE, re.M
@@ -57,16 +57,39 @@ copyright = find_meta("copyright")
 
 # -- General configuration ---------------------------------------------------
 
+# In nitpick mode (-n), still ignore any of the following "broken" references
+# to non-types.
+nitpick_ignore = [
+    # ("py:class", "Any value"),
+    # ("py:class", "callable"),
+    # ("py:class", "callables"),
+    # ("py:class", "iterable"),
+    # ("py:class", "iterables"),
+    # ("py:class", "tuple of types"),
+]
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
-    "sphinx.ext.napoleon",
+    "numpydoc",
 ]
+
+# numpydoc settings
+numpydoc_xref_param_type = True
+numpydoc_xref_ignore = {'type', 'optional', 'default'}
+
+
+# Intersphinx settings
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', None),
+    'numpy': ('https://numpy.org/doc/1.17/', None),
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
