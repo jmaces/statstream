@@ -1,5 +1,4 @@
 # custom ignores
-docs/api/
 .coverage*
 
 # Byte-compiled / optimized / DLL files

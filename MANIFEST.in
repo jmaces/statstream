@@ -13,7 +13,6 @@ recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs .gitkeep
 prune docs/_build
-prune docs/api
 
 # Just to keep check-manifest happy; on releases those files are gone.
 # Last rule wins!
