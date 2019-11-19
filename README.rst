@@ -22,12 +22,12 @@
 
 .. teaser-start
 
-``streamstat`` is a lightweight Python package providing data analysis and statistics utilities for streaming data.
+``statstream`` is a lightweight Python package providing data analysis and statistics utilities for streaming data.
 
 Its main goal is to provide **single-pass** variants of conventional `numpy <https://numpy.org/>`_
 data analysis and statistics functionality for **streaming** data that is
 either generated on the fly or to large to be handled at once. Data can be
-streamed as in chunks called **mini-batches**, which makes ``streamstat``
+streamed as in chunks called **mini-batches**, which makes ``statstream``
 extremely useful in combination with machine learning and deep learning
 packages like `keras <https://keras.io/>`_, `tensorflow <https://www.tensorflow.org/>`_, or `pytorch <https://pytorch.org/>`_.
 
@@ -36,14 +36,14 @@ packages like `keras <https://keras.io/>`_, `tensorflow <https://www.tensorflow.
 
 .. example
 
-``streamstat`` functions consume iterators providing batches of data.
+``statstream`` functions consume iterators providing batches of data.
 They compute statistics of these batches and combine them to obtain statistics
 for the full data set.
 
 .. code-block:: python
 
-   import streamstat
-   mean = streamstat.streaming_mean(some_iterable)
+   import statstream
+   mean = statstream.streaming_mean(some_iterable)
 
 The `Overview <https://statstream.readthedocs.io/en/latest/overview.html>`_ and
 `Examples <https://statstream.readthedocs.io/en/latest/examples.html>`_ sections
@@ -54,13 +54,13 @@ of our documentation provide more realistic and complete examples.
 Project Information
 ===================
 
-``streamstat`` is released under the `MIT license <https://github.com/jmaces/statstream/blob/master/LICENSE>`_,
+``statstream`` is released under the `MIT license <https://github.com/jmaces/statstream/blob/master/LICENSE>`_,
 its documentation lives at `Read the Docs <https://statstream.readthedocs.io/en/latest/>`_,
 the code on `GitHub <https://github.com/jmaces/statstream>`_,
 and the latest release can soon be found on PyPI.
 It’s tested on Python 2.7 and 3.4+.
 
-If you'd like to contribute to ``streamstat`` you're most welcome.
+If you'd like to contribute to ``statstream`` you're most welcome.
 We have written a `short guide <https://github.com/jmaces/statstream/blob/master/.github/CONTRIBUTING.rst>`_ to help you get you started!
 
 .. project-info-end
@@ -71,7 +71,7 @@ We have written a `short guide <https://github.com/jmaces/statstream/blob/master
 Further Reading
 ===============
 
-Additional information on the algorithmic aspects of ``streamstat`` can be found
+Additional information on the algorithmic aspects of ``statstream`` can be found
 in the following works:
 
 - Tony F. Chan & Gene H. Golub & Randall J. LeVeque,
