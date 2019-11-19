@@ -35,6 +35,3 @@ Changes
   + statstream.approximate.streaming_low_rank_autocorrelation()
   + statstream.approximate.streaming_low_rank_cov()
   + statstream.approximate.streaming_mean_and_low_rank_cov()
-
-
-----
