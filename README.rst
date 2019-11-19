@@ -32,12 +32,18 @@ packages like `keras <https://keras.io/>`_, `tensorflow <https://www.tensorflow.
 
 .. example
 
-``streamstat`` functions consume iterators
+``streamstat`` functions consume iterators providing batches of data.
+They compute statistics of these batches and combine them to obtain statistics
+for the full data set.
 
 .. code-block:: python
 
    import streamstat
+   mean = streamstat.streaming_mean(some_iterable)
 
+The `Overview <https://statstream.readthedocs.io/en/latest/overview.html>`_ and
+`Examples <https://statstream.readthedocs.io/en/latest/examples.html>`_ sections
+of our documentation provide more realistic and complete examples.
 
 .. project-info-start
 
