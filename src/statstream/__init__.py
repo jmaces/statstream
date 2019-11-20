@@ -56,7 +56,7 @@ from .exact import (
 
 
 # package meta data
-__version__ = "19.1.0"  # 0Y.Minor.Micro CalVer format
+__version__ = "19.2.0.dev0"  # 0Y.Minor.Micro CalVer format
 __title__ = "statstream"
 __description__ = "Statistics for Streaming Data"
 __url__ = "https://github.com/jmaces/statstream"
