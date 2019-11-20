@@ -28,7 +28,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.8",
     "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Scientific/Engineering :: Mathematics",
-    # "Private :: Do Not Upload",  # safeguard - remove for actual packages
+    "Private :: Do Not Upload",  # safeguard - remove for actual packages
 ]
 INSTALL_REQUIRES = ["numpy", "tqdm", "scipy"]
 EXTRAS_REQUIRE = {

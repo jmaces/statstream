@@ -12,7 +12,7 @@ Release v\ |release| (`What's new? <changelog>`).
 Getting Started
 ===============
 
-``statstream`` is a Python-only package `hosted on PyPI <https://todo.com>`_.
+``statstream`` is a Python-only package `hosted on PyPI <https://pypi.org/project/statstream/>`_.
 The recommended installation method is `pip <https://pip.pypa.io/en/stable/>`_-installing
 into a virtual environment.
 

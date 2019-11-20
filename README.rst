@@ -57,7 +57,7 @@ Project Information
 ``statstream`` is released under the `MIT license <https://github.com/jmaces/statstream/blob/master/LICENSE>`_,
 its documentation lives at `Read the Docs <https://statstream.readthedocs.io/en/latest/>`_,
 the code on `GitHub <https://github.com/jmaces/statstream>`_,
-and the latest release can soon be found on PyPI.
+and the latest release can be found on `PyPI <https://pypi.org/project/statstream/>`_.
 It’s tested on Python 2.7 and 3.4+.
 
 If you'd like to contribute to ``statstream`` you're most welcome.
