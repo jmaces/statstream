@@ -1,5 +1,6 @@
 # custom ignores
 .coverage*
+!.coveragerc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
