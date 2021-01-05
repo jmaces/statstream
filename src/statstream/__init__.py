@@ -25,7 +25,7 @@ For brevity also aliases with the shorter prefix ``s_`` are provided.
 """
 from __future__ import absolute_import, division, print_function
 
-from .approximate import (
+from .approximate import (  # noqa:F401
     s_low_rank_autocorrelation,
     s_low_rank_cov,
     s_low_rank_covariance,
@@ -37,7 +37,8 @@ from .approximate import (
     streaming_mean_and_low_rank_cov,
     streaming_mean_and_low_rank_covariance,
 )
-from .exact import (
+
+from .exact import (  # noqa:F401
     s_cov,
     s_covariance,
     s_max,
