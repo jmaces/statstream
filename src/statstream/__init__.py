@@ -37,7 +37,6 @@ from .approximate import (  # noqa:F401
     streaming_mean_and_low_rank_cov,
     streaming_mean_and_low_rank_covariance,
 )
-
 from .exact import (  # noqa:F401
     s_cov,
     s_covariance,
