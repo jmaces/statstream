@@ -462,7 +462,7 @@ def streaming_mean_and_low_rank_cov(
 streaming_low_rank_covariance = streaming_low_rank_cov
 streaming_mean_and_low_rank_covariance = streaming_mean_and_low_rank_cov
 s_low_rank_autocorrelation = streaming_low_rank_autocorrelation
-s_rank_cov = streaming_low_rank_cov
-s_rank_covariance = streaming_low_rank_covariance
+s_low_rank_cov = streaming_low_rank_cov
+s_low_rank_covariance = streaming_low_rank_covariance
 s_mean_and_low_rank_cov = streaming_mean_and_low_rank_cov
 s_mean_and_low_rank_covariance = streaming_mean_and_low_rank_covariance
