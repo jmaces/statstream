@@ -1,0 +1,1 @@
+``statstream.approximate`` functionality is now exposed from the main module as described in the documentation.

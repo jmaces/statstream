@@ -25,6 +25,18 @@ For brevity also aliases with the shorter prefix ``s_`` are provided.
 """
 from __future__ import absolute_import, division, print_function
 
+from .approximate import (
+    s_low_rank_autocorrelation,
+    s_low_rank_cov,
+    s_low_rank_covariance,
+    s_mean_and_low_rank_cov,
+    s_mean_and_low_rank_covariance,
+    streaming_low_rank_autocorrelation,
+    streaming_low_rank_cov,
+    streaming_low_rank_covariance,
+    streaming_mean_and_low_rank_cov,
+    streaming_mean_and_low_rank_covariance,
+)
 from .exact import (
     s_cov,
     s_covariance,
@@ -72,6 +84,7 @@ __copyright__ = "Copyright 2019 Jan Maces"
 
 # export main package functionality
 __all__ = [
+    # from .exact
     streaming_min,
     streaming_max,
     streaming_mean,
@@ -98,4 +111,15 @@ __all__ = [
     s_cov,
     s_variance,
     s_covariance,
+    # from .approximate
+    streaming_low_rank_autocorrelation,
+    streaming_low_rank_cov,
+    streaming_low_rank_covariance,
+    streaming_mean_and_low_rank_cov,
+    streaming_mean_and_low_rank_covariance,
+    s_low_rank_autocorrelation,
+    s_low_rank_cov,
+    s_low_rank_covariance,
+    s_mean_and_low_rank_cov,
+    s_mean_and_low_rank_covariance,
 ]
