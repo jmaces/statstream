@@ -3,7 +3,7 @@ name: pr-check
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   pr-check:
