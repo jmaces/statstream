@@ -7,8 +7,8 @@
     :target: https://statstream.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. image:: https://travis-ci.com/jmaces/statstream.svg?branch=master
-    :target: https://travis-ci.com/jmaces/statstream?branch=master
+.. image:: https://github.com/jmaces/statstream/actions/workflows/pr-check.yml/badge.svg?branch=master
+    :target: https://github.com/jmaces/statstream/actions/workflows/pr-check.yml?branch=master
     :alt: CI Status
 
 .. image:: https://codecov.io/gh/jmaces/statstream/branch/master/graph/badge.svg
