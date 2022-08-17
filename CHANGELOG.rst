@@ -14,6 +14,19 @@ Changes for the upcoming release can be found in the `"changelog.d" directory <h
 
 .. towncrier release notes start
 
+22.1.0 (2022-08-17)
+-------------------
+
+Changes
+^^^^^^^
+
+- ``statstream.approximate`` functionality is now exposed from the main module as described in the documentation.
+  `#4 <https://github.com/jmaces/statstream/issues/4>`_
+
+
+----
+
+
 19.1.0 (2019-11-19)
 -------------------
 

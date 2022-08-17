@@ -8,13 +8,13 @@ from hypothesis import assume
 
 # array comparison helpers robust to precision loss
 def assert_eq(x, y, atol=np.finfo(np.float64).eps, rtol=1e-7):
-    """Robustly and symmetrically assert x == y componentwise. """
+    """Robustly and symmetrically assert x == y componentwise."""
     tol = atol + rtol * np.maximum(np.abs(x), np.abs(y), dtype=np.float64)
     np.testing.assert_array_less(np.abs(x - y), tol)
 
 
 def assert_leq(x, y, atol=np.finfo(np.float64).eps, rtol=1e-7):
-    """Robustly assert x <= y componentwise. """
+    """Robustly assert x <= y componentwise."""
     mask = np.greater(x, y)
     np.testing.assert_allclose(x[mask], y[mask], atol=atol, rtol=rtol)
 
@@ -78,7 +78,11 @@ def batched_float_array_iterator(
     dtype = draw(hnp.floating_dtypes())
     bytes = dtype.itemsize
     bits = 8 * bytes
-    shape = draw(hnp.array_shapes(min_dims=2))
+    if min_batch_size and min_data_size:
+        side = max(min_batch_size, min_data_size)
+    else:
+        side = 1
+    shape = draw(hnp.array_shapes(min_dims=2, min_side=side))
     if min_batch_size is not None:
         assume(shape[0] >= min_batch_size)
     if min_data_size is not None:
@@ -89,7 +93,7 @@ def batched_float_array_iterator(
         elements=clean_floats(width=bits),
         fill=clean_floats(width=bits),
     )
-    iter = draw(st.iterables(ar, min_size=1))
+    iter = draw(st.iterables(ar, min_size=1, max_size=10))
     return iter
 
 
@@ -109,7 +113,11 @@ def batched_float_array_tuple_iterator(
     dtype = draw(hnp.floating_dtypes())
     bytes = dtype.itemsize
     bits = 8 * bytes
-    shape = draw(hnp.array_shapes(min_dims=2))
+    if min_batch_size and min_data_size:
+        side = max(min_batch_size, min_data_size)
+    else:
+        side = 1
+    shape = draw(hnp.array_shapes(min_dims=2, min_side=side))
     if min_batch_size is not None:
         assume(shape[0] >= min_batch_size)
     if min_data_size is not None:
@@ -120,7 +128,7 @@ def batched_float_array_tuple_iterator(
         elements=clean_floats(width=bits),
         fill=clean_floats(width=bits),
     )
-    iter = draw(st.iterables(st.tuples(ar, ar), min_size=1))
+    iter = draw(st.iterables(st.tuples(ar, ar), min_size=1, max_size=10))
     return iter
 
 
@@ -136,13 +144,17 @@ def batched_int_array_iterator(draw, min_batch_size=None, min_data_size=None):
     dimension can be specified respectively.
     """
     dtype = draw(hnp.integer_dtypes())
-    shape = draw(hnp.array_shapes(min_dims=2))
+    if min_batch_size and min_data_size:
+        side = max(min_batch_size, min_data_size)
+    else:
+        side = 1
+    shape = draw(hnp.array_shapes(min_dims=2, min_side=side))
     if min_batch_size is not None:
         assume(shape[0] >= min_batch_size)
     if min_data_size is not None:
         assume(np.prod(shape[1:]) >= min_data_size)
     ar = hnp.arrays(dtype, shape)
-    iter = draw(st.iterables(ar, min_size=1))
+    iter = draw(st.iterables(ar, min_size=1, max_size=10))
     return iter
 
 
@@ -160,11 +172,15 @@ def batched_int_array_tuple_iterator(
     dimension can be specified respectively.
     """
     dtype = draw(hnp.integer_dtypes())
-    shape = draw(hnp.array_shapes(min_dims=2))
+    if min_batch_size and min_data_size:
+        side = max(min_batch_size, min_data_size)
+    else:
+        side = 1
+    shape = draw(hnp.array_shapes(min_dims=2, min_side=side))
     if min_batch_size is not None:
         assume(shape[0] >= min_batch_size)
     if min_data_size is not None:
         assume(np.prod(shape[1:]) >= min_data_size)
     ar = hnp.arrays(dtype, shape)
-    iter = draw(st.iterables(st.tuples(ar, ar), min_size=1))
+    iter = draw(st.iterables(st.tuples(ar, ar), min_size=1, max_size=10))
     return iter

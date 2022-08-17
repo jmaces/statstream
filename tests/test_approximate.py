@@ -48,7 +48,7 @@ def test_mean_and_low_rank_cov_eq_mean_and_low_rank_cov(
     X, rank, tree, reset_func
 ):
     """Combined mean and low rank covariance matrix is equal to individual mean
-    and low rank covariance matrix. """
+    and low rank covariance matrix."""
     # setup reset functionality for reusable iterator
     X_list = list(X)
     if reset_func:
@@ -62,10 +62,16 @@ def test_mean_and_low_rank_cov_eq_mean_and_low_rank_cov(
         X1, X2 = ResettableIterator(X_list), ResettableIterator(X_list)
     mean1 = statstream.exact.streaming_mean(iter(X_list))
     cov1 = statstream.approximate.streaming_low_rank_cov(
-        X1, rank, tree=tree, reset=reset,
+        X1,
+        rank,
+        tree=tree,
+        reset=reset,
     )
     mean2, cov2 = statstream.approximate.streaming_mean_and_low_rank_cov(
-        X2, rank, tree=tree, reset=reset,
+        X2,
+        rank,
+        tree=tree,
+        reset=reset,
     )
     # we can not directly compare results yet, factors are not uniquely defined
     cov1 = np.reshape(cov1, [cov1.shape[0], np.prod(cov1.shape[1:])])
@@ -76,7 +82,10 @@ def test_mean_and_low_rank_cov_eq_mean_and_low_rank_cov(
     # thus we have to be quite genererous with the tolerance here
     assert_eq(mean1, mean2)
     assert_eq(
-        np.matmul(cov1.T, cov1), np.matmul(cov2.T, cov2), atol=1e-3, rtol=3e0,
+        np.matmul(cov1.T, cov1),
+        np.matmul(cov2.T, cov2),
+        atol=1e-3,
+        rtol=3e0,
     )
 
 
@@ -91,13 +100,18 @@ def test_mean_and_low_rank_cov_eq_mean_and_low_rank_cov(
 )
 def test_autocorrelation_step_eq_no_step(X, rank, tree):
     """Low rank autocorrelation matrix is equal to low rank autocorrelation
-    matrix with ``steps``. """
+    matrix with ``steps``."""
     X_list = list(X)  # setup reusable iterator
     corr1 = statstream.approximate.streaming_low_rank_autocorrelation(
-        iter(X_list), rank, tree=tree,
+        iter(X_list),
+        rank,
+        tree=tree,
     )
     corr2 = statstream.approximate.streaming_low_rank_autocorrelation(
-        iter(X_list), rank, steps=len(X_list), tree=tree,
+        iter(X_list),
+        rank,
+        steps=len(X_list),
+        tree=tree,
     )
     # we can not directly compare results yet, factors are not uniquely defined
     corr1 = np.reshape(corr1, [corr1.shape[0], np.prod(corr1.shape[1:])])
@@ -125,7 +139,7 @@ def test_autocorrelation_step_eq_no_step(X, rank, tree):
 )
 def test_cov_step_eq_no_step(X, rank, tree, reset_func):
     """Low rank covariance matrix is equal to low rank covariance matrix with
-    ``steps``. """
+    ``steps``."""
     X_list = list(X)
     if reset_func:
 
@@ -137,10 +151,17 @@ def test_cov_step_eq_no_step(X, rank, tree, reset_func):
         reset = None
         X1, X2 = ResettableIterator(X_list), ResettableIterator(X_list)
     cov1 = statstream.approximate.streaming_low_rank_cov(
-        X1, rank, tree=tree, reset=reset,
+        X1,
+        rank,
+        tree=tree,
+        reset=reset,
     )
     cov2 = statstream.approximate.streaming_low_rank_cov(
-        X2, rank, steps=len(X_list), tree=tree, reset=reset,
+        X2,
+        rank,
+        steps=len(X_list),
+        tree=tree,
+        reset=reset,
     )
     # we can not directly compare results yet, factors are not uniquely defined
     cov1 = np.reshape(cov1, [cov1.shape[0], np.prod(cov1.shape[1:])])
@@ -150,5 +171,8 @@ def test_cov_step_eq_no_step(X, rank, tree, reset_func):
     # errors depend on the conditioning of the matrices
     # thus we have to be quite genererous with the tolerance here
     assert_eq(
-        np.matmul(cov1.T, cov1), np.matmul(cov2.T, cov2), atol=1e-3, rtol=3e0,
+        np.matmul(cov1.T, cov1),
+        np.matmul(cov2.T, cov2),
+        atol=1e-3,
+        rtol=3e0,
     )

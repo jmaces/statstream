@@ -622,7 +622,8 @@ def streaming_mean_and_cov(X, steps=None):
                 batch, mean_accumulator, covariance_accumulator, count
             )
     covariance_accumulator = np.reshape(
-        covariance_accumulator, 2 * mean_accumulator.shape,
+        covariance_accumulator,
+        2 * mean_accumulator.shape,
     )
     return mean_accumulator / count, covariance_accumulator / (count - 1)
 

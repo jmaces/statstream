@@ -203,7 +203,10 @@ def streaming_low_rank_autocorrelation(
 
     def _process_batch(batch, S, V, rank, count):
         batch_size = batch.shape[0]
-        Ub, Sb, Vb = _truncated_svd(np.reshape(batch, [batch_size, -1]), rank,)
+        Ub, Sb, Vb = _truncated_svd(
+            np.reshape(batch, [batch_size, -1]),
+            rank,
+        )
         if S is None or V is None:
             S, V = Sb, Vb
         else:
@@ -213,7 +216,10 @@ def streaming_low_rank_autocorrelation(
 
     def _tree_process_batch(batch, stack, rank, count):
         batch_size = batch.shape[0]
-        Ub, Sb, Vb = _truncated_svd(np.reshape(batch, [batch_size, -1]), rank,)
+        Ub, Sb, Vb = _truncated_svd(
+            np.reshape(batch, [batch_size, -1]),
+            rank,
+        )
         stack.append({"S": Sb, "V": Vb, "level": 0})
         while len(stack) >= 2 and stack[-1]["level"] == stack[-2]["level"]:
             item1, item2 = stack.pop(), stack.pop()
@@ -358,7 +364,11 @@ def streaming_low_rank_cov(X, rank, steps=None, tree=False, reset=None):
     else:
         X.reset()
     covariance = streaming_low_rank_autocorrelation(
-        X, rank, steps=steps, shift=mean, tree=tree,
+        X,
+        rank,
+        steps=steps,
+        shift=mean,
+        tree=tree,
     )
     return covariance
 
@@ -453,7 +463,11 @@ def streaming_mean_and_low_rank_cov(
     else:
         X.reset()
     covariance = streaming_low_rank_autocorrelation(
-        X, rank, steps=steps, shift=mean, tree=tree,
+        X,
+        rank,
+        steps=steps,
+        shift=mean,
+        tree=tree,
     )
     return mean, covariance
 
