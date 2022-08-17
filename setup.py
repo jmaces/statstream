@@ -52,7 +52,7 @@ def read(*parts):
     Build an absolute path from *parts* and and return the contents of the
     resulting file.  Assume UTF-8 encoding.
     """
-    with codecs.open(os.path.join(HERE, *parts), "rb", "utf-8") as f:
+    with codecs.open(os.path.join(HERE, *parts), "rUb", "utf-8") as f:
         return f.read()
 
 
